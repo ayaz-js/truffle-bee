@@ -3,12 +3,14 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "homepage": "./",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "create-component": "./create_component.sh"
+    "create-component": "./create_component.sh",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "cleave.js": "^1.6.0",
