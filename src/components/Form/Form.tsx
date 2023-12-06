@@ -2,6 +2,8 @@ import React, { FC, useState } from "react";
 import Cleave from "cleave.js/react";
 import "cleave.js/dist/addons/cleave-phone.kz";
 import { ArrowRight } from "../Icons/ArrowRight";
+import { SuccessMessage } from "../SuccessMessage";
+import { Loader } from "../Loader";
 
 interface FormProps {}
 
@@ -11,22 +13,21 @@ export const Form: FC = ({}: FormProps) => {
   const [form, setForm] = useState({
     name: "",
     lastName: "",
-    birthDay: "",
+    day: "",
+    month: "",
+    year: "",
     email: "",
     phone: "",
   });
+
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const options = {
     phone: true,
     phoneRegionCode: "KZ",
     prefix: "",
     delimiter: "-",
-  };
-
-  const birthDayOptions = {
-    date: true,
-    delimiter: "-",
-    datePattern: ["Y", "m", "d"],
   };
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,7 +38,9 @@ export const Form: FC = ({}: FormProps) => {
     setForm({
       name: "",
       lastName: "",
-      birthDay: "",
+      day: "",
+      month: "",
+      year: "",
       email: "",
       phone: "",
     });
@@ -45,12 +48,13 @@ export const Form: FC = ({}: FormProps) => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
+    setIsLoading(true);
 
     const _formData = new FormData();
 
     _formData.append("Имя", form.name);
     _formData.append("Фамилия", form.lastName);
-    _formData.append("День Рождения", form.birthDay);
+    _formData.append("День Рождения", `${form.day}-${form.month}-${form.year}`);
     _formData.append("Почта", form.email);
     _formData.append("Телефон", `+7${form.phone}`);
 
@@ -59,7 +63,9 @@ export const Form: FC = ({}: FormProps) => {
       body: _formData,
     })
       .then(() => resetForm())
-      .catch((error) => console.log(error));
+      .then(() => setIsSuccess(true))
+      .catch((error) => console.log(error))
+      .finally(() => setIsLoading(false));
   };
 
   return (
@@ -80,7 +86,7 @@ export const Form: FC = ({}: FormProps) => {
                   type="text"
                   placeholder="Имя*"
                   onChange={onChange}
-                  className="py-4 px-8 w-full rounded-full border border-[#10190c] opacity-40 mt-2"
+                  className="py-4 px-8 w-full rounded-full border border-green-800 placeholder-gray-400 mt-2"
                 />
               </label>
             </div>
@@ -95,7 +101,7 @@ export const Form: FC = ({}: FormProps) => {
                   type="text"
                   placeholder="Фамилия*"
                   onChange={onChange}
-                  className="py-4 px-8 w-full rounded-full border border-[#10190c] opacity-40 mt-2"
+                  className="py-4 px-8 w-full rounded-full border border-green-800 placeholder-gray-400 mt-2"
                 />
               </label>
             </div>
@@ -104,14 +110,35 @@ export const Form: FC = ({}: FormProps) => {
           <div className="flex flex-col gap-2 w-full">
             <label>
               <span className="px-6">День рождения</span>
-              <Cleave
-                value={form.birthDay}
-                name="birthDay"
-                options={birthDayOptions}
-                placeholder="День рождения"
-                onChange={onChange}
-                className="py-4 px-8 w-full rounded-full border border-[#10190c] opacity-40 mt-2"
-              />
+              <div className="flex gap-2 mt-2">
+                <input
+                  value={form.day}
+                  name="day"
+                  placeholder="DD"
+                  maxLength={2}
+                  minLength={2}
+                  onChange={onChange}
+                  className="py-4 px-8 max-w-[168px] w-full rounded-full border border-green-800 placeholder-gray-400"
+                />
+                <input
+                  value={form.month}
+                  name="month"
+                  placeholder="MM"
+                  maxLength={2}
+                  minLength={2}
+                  onChange={onChange}
+                  className="py-4 px-8 max-w-[168px] w-full rounded-full border border-green-800 placeholder-gray-400"
+                />
+                <input
+                  value={form.year}
+                  name="year"
+                  placeholder="YYYY"
+                  maxLength={4}
+                  minLength={4}
+                  onChange={onChange}
+                  className="py-4 px-8 w-full rounded-full border border-green-800 placeholder-gray-400"
+                />
+              </div>
             </label>
           </div>
 
@@ -125,7 +152,7 @@ export const Form: FC = ({}: FormProps) => {
                 name="email"
                 onChange={onChange}
                 placeholder="Электронная почта"
-                className="py-4 px-8 w-full rounded-full border border-[#10190c] opacity-40 mt-2"
+                className="py-4 px-8 w-full rounded-full border border-green-800 placeholder-gray-400 mt-2"
               />
             </label>
           </div>
@@ -134,7 +161,7 @@ export const Form: FC = ({}: FormProps) => {
             <label>
               <span className="px-6">Номер телефона</span>
               <div className="flex gap-1 items-center mt-2">
-                <span className="py-4 px-8 rounded-full border border-[#10190c] opacity-40">
+                <span className="py-4 px-8 rounded-full border border-green-800 placeholder-gray-400">
                   +7
                 </span>
                 <Cleave
@@ -143,7 +170,7 @@ export const Form: FC = ({}: FormProps) => {
                   options={options}
                   onChange={onChange}
                   placeholder="000 000 00 00"
-                  className="py-4 px-8 w-full rounded-full border border-[#10190c] opacity-40"
+                  className="py-4 px-8 w-full rounded-full border border-green-800 placeholder-gray-400"
                 />
               </div>
             </label>
@@ -168,6 +195,7 @@ export const Form: FC = ({}: FormProps) => {
             <input
               required
               type="checkbox"
+              name="checkBox"
               className="w-3.5 h-3.5 border border-black rounded-full"
             />
             <p className="text-sm sm:text-base">
@@ -175,12 +203,19 @@ export const Form: FC = ({}: FormProps) => {
             </p>
           </label>
 
+          {isSuccess && <SuccessMessage />}
           <button
             className="flex items-center justify-center border rounded-2xl border-black gap-2 py-3 mt-8 sm:max-w-[368px] transition duration-300 ease-in-out hover:opacity-50"
             type="submit"
           >
-            <ArrowRight />
-            Коллекция
+            {!isLoading ? (
+              <>
+                <ArrowRight />
+                Коллекция
+              </>
+            ) : (
+              <Loader />
+            )}
           </button>
         </form>
       </div>
