@@ -12,7 +12,7 @@ function App() {
           src="/images/main.png"
           alt="truffle bee"
         />
-        <div className="relative max-w-[1440px] my-0 mx-auto px-4">
+        <div className="flex justify-center items-center flex-col  relative max-w-[1440px] my-0 mx-auto px-4">
           <Header />
           <Lead />
           <Form />

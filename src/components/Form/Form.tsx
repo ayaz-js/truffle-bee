@@ -70,11 +70,8 @@ export const Form: FC = ({}: FormProps) => {
 
   return (
     <div className="pt-16 sm:pt-[128px]">
-      <div className="max-w-[1440px] w-full my-0 mx-auto">
-        <form
-          onSubmit={handleSubmit}
-          className="max-w-[820px] w-full flex flex-col gap-8"
-        >
+      <div className="max-w-screen-lg w-full my-0 mx-auto">
+        <form onSubmit={handleSubmit} className="w-full flex flex-col gap-8">
           <div className="flex max-[567px]:flex-col gap-6">
             <div className="flex gap-2 w-full">
               <label className="w-full">
@@ -114,7 +111,7 @@ export const Form: FC = ({}: FormProps) => {
                 <input
                   value={form.day}
                   name="day"
-                  placeholder="DD"
+                  placeholder="День"
                   maxLength={2}
                   minLength={2}
                   onChange={onChange}
@@ -123,7 +120,7 @@ export const Form: FC = ({}: FormProps) => {
                 <input
                   value={form.month}
                   name="month"
-                  placeholder="MM"
+                  placeholder="Месяц"
                   maxLength={2}
                   minLength={2}
                   onChange={onChange}
@@ -132,7 +129,7 @@ export const Form: FC = ({}: FormProps) => {
                 <input
                   value={form.year}
                   name="year"
-                  placeholder="YYYY"
+                  placeholder="Год"
                   maxLength={4}
                   minLength={4}
                   onChange={onChange}
@@ -211,7 +208,7 @@ export const Form: FC = ({}: FormProps) => {
             {!isLoading ? (
               <>
                 <ArrowRight />
-                Коллекция
+                Отправить
               </>
             ) : (
               <Loader />
